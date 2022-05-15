@@ -64,9 +64,13 @@ def show_filter():
     :return:
     """
     test = [1, 2, "ab", 4, "b", 5, "c"]
-    print(list(filter(lambda x:
-                     isinstance(x, str),
-               test)))
+    print(
+        list(
+            filter(
+                lambda x: isinstance(x, str), test
+            )
+        )
+    )
 
 # show_filter()
 

@@ -36,13 +36,7 @@ def pow_num(num: int, degree: int):
         return 1
     return num * pow_num(num, degree - 1)
 
-def is_polyndrom(string: str):
-    if len(string) % 2 != 0:
-        return False
-    elif len(string) == 0:
-        return True
-    else:
-        if
+
 
 
 
