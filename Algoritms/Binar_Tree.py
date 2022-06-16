@@ -132,8 +132,8 @@ def find_node(value: int, tree: Tree):
     """
     find: Node = tree.find(value)
     if find is not None:
-        print(f"Find node {find.id} with value {find.value}") \
-                return find
+        print(f"Find node {find.id} with value {find.value}")
+        return find
     else:
         print(f"Value {value} not in tree {tree.id}")
         return None
