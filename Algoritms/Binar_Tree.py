@@ -1,7 +1,18 @@
+__all__ = ["Node",
+           "Tree",
+           ]
 import random
 
 
 class Node:
+    """
+    Structure of Node:
+    count - need for id None
+    left - link to left Node
+    right - link to right Node
+    value - value of Node
+    id - Id of Node
+    """
     count = 0
 
     def __init__(self, val):
@@ -13,11 +24,14 @@ class Node:
 
 
 class Tree:
+    """
+    Tree class
+    """
     count = 0
 
     def __init__(self):
         """
-        Create Tree
+        Create empty Tree
         """
         # For ID tree, NOT USEFUL
         Tree.count += 1
@@ -25,12 +39,14 @@ class Tree:
         # FIRST inincialization root of tree is None
         # first Tree.add root is not None
         self.root: Node = None
+        # Contains array of all nodes, need for print oder nodes, clear after use
+        self.tree_nodes = []
 
     def add(self, val):
         """
         Add value to tree
         :param val: value, type INT
-        :return:
+        :return: True
         """
         if not isinstance(val, int):
             raise TypeError("Value in Tree must be ONLY INT")
@@ -38,6 +54,7 @@ class Tree:
             self._add(val, self.root)
         else:
             self.root = Node(val)
+            return True
 
     def _add(self, val: int, node: Node):
         """
@@ -89,6 +106,7 @@ class Tree:
         Print Tree
         :return: None
         """
+        print("Structure of tree")
         self._printTree(self.root)
 
     def _printTree(self, node: Node, level=0):
@@ -109,8 +127,23 @@ class Tree:
         Print ordered Nodes (by Node.id) in Tree
         :return: None
         """
-        if self.root is not None:
+        if self.root is None:
+            print("Tree is empty")
+            return None
+        else:
+            print("Order Nodes")
             self._printOrderAdder(self.root)
+            self.tree_nodes.sort(key=Tree.sort_array)
+            for node in self.tree_nodes:
+                if node.right is not None and node.left is not None:
+                    print(f"ID: {node.id}, value: {node.value}, right: {node.right.id}, left: {node.left.id}")
+                elif node.right is not None and node.left is None:
+                    print(f"ID: {node.id}, value: {node.value}, right: {node.right.id}, left: None")
+                elif node.right is None and node.left is not None:
+                    print(f"ID: {node.id}, value: {node.value}, right: None, left: {node.left.id}")
+                else:
+                    print(f"ID: {node.id} value: {node.value}, right: None, left: None")
+            self.tree_nodes = []
 
     def _printOrderAdder(self, node: Node):
         """
@@ -119,30 +152,68 @@ class Tree:
         :return: None, only print all orderd Nodes (by Node.id) in Tree
         """
         if node is not None:
-            pass
-            # TODO: print order Nodes of Tree
+            self.tree_nodes.append(node)
+            self._printOrderAdder(node.left)
+            self._printOrderAdder(node.right)
 
+    def delete_tree(self):
+        """
+        Delete link of root
+        :return: None
+        """
+        self.root = None
 
-def find_node(value: int, tree: Tree):
-    """
-    Find value in Tree
-    :param value: value
-    :param tree: Tree
-    :return: Node or None
-    """
-    find: Node = tree.find(value)
-    if find is not None:
-        print(f"Find node {find.id} with value {find.value}")
-        return find
-    else:
-        print(f"Value {value} not in tree {tree.id}")
-        return None
+    def find_node(self, value: int):
+        """
+        Find value in Tree
+        :param value: value
+        :param tree: Tree
+        :return: Node or None
+        """
+        find: Node = self.find(value)
+        if find is not None:
+            print(f"Find node {find.id} with value {find.value}")
+            return find
+        else:
+            print(f"Value {value} not in tree {self.id}")
+            return None
 
+    def fill_tree_random(self, num=10, limit_low=1, limit_high=10):
+        """
+        Add to tree num nodes, value of each other between limit_low and limit_high
+        :param num: number of nodes Tree
+        :param limit_low: lower value of Tree.value
+        :param limit_height: higher value of Tree.value
+        :return: result of add nodes to tree
+        """
+        if self.root is not None:
+            return False
+        if not isinstance(num, int) or not isinstance(limit_low, int) or not isinstance(limit_high, int):
+            raise TypeError("Value must be int")
+        if num < 1:
+            raise ValueError("Number of tree must be more than 0")
+        if limit_low == limit_high or limit_low > limit_high:
+            raise ValueError("Incorrect values: limit_low, limit_high")
+        for _ in range(0, num):
+            self.add(random.randint(limit_low, limit_high))
+        return True
 
-tree = Tree()
-tree.add(5)
-for _ in range(10):
-    tree.add(random.randint(1, 10))
+    @staticmethod
+    def sort_array(node: Node):
+        """
+        Supportive function to sort tree_nodes
+        :param node:
+        :return:
+        """
+        return node.id
 
-tree.printTree()
-find_node(7, tree)
+if __name__ == "__main__":
+    # Example
+    tree = Tree()
+    tree.add(5)
+    for _ in range(10):
+        tree.add(random.randint(1, 10))
+
+    tree.printTree()
+    tree.find_node(7)
+    tree.printOrderAdder()
