@@ -37,7 +37,7 @@ def heapreplace():
     print(f"Data after replace: {data}")
 
 def heap_small_largest():
-    data = [random.randint(1,20) for _ in range(10)]
+    data = [random.randint(1, 20) for _ in range(10)]
     heapq.heapify(data)
     print(f"Data: {data}")
     print(f"Smallest: {heapq.nsmallest(2, data)}")
